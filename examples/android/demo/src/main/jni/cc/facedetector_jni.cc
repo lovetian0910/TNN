@@ -8,8 +8,11 @@
 #include <jni.h>
 #include "helper_jni.h"
 #include <android/bitmap.h>
+#include "BodySegment.h"
 
 static std::shared_ptr<UltraFaceDetector> gDetector;
+
+static std::shared_ptr<BodySegment> gBodySegment;
 static int gComputeUnitType = 0; // 0 is cpu, 1 is gpu
 static jclass clsFaceInfo;
 static jmethodID midconstructorFaceInfo;
@@ -20,6 +23,34 @@ static jfieldID fidy2;
 static jfieldID fidscore;
 static jfieldID fidlandmarks;
 // Jni functions
+
+JNIEXPORT jint JNICALL TNN_FACE_DETECTOR(initForBodySegment)(JNIEnv *env, jobject thiz,
+                                                             jstring model_path, jstring model_name,
+                                                             jstring proto_name){
+    int width = 256, height = 256;
+    std::vector<int> nchw = {1, 3, width, height};
+    setBenchResult("");
+    gBodySegment = std::make_shared<BodySegment>();
+    std::string protoContent, modelContent;
+    std::string modelPathStr(jstring2string(env, model_path));
+    std::string modelNameStr(jstring2string(env, model_name));
+    std::string protoNameStr(jstring2string(env, proto_name));
+
+    protoContent = fdLoadFile(modelPathStr + "/" + protoNameStr);
+    modelContent = fdLoadFile(modelPathStr + "/" + modelNameStr);
+
+    TNN_NS::Status status = gBodySegment->Init(protoContent, modelContent, "", TNN_NS::TNNComputeUnitsGPU, nchw);
+    if(status != TNN_NS::TNN_OK){
+        LOGE("bodySegment init failed %d", (int)status);
+        return -1;
+    }
+    TNN_NS::BenchOption bench_option;
+    bench_option.forward_count = 1;
+    gBodySegment->SetBenchOption(bench_option);
+    return 0;
+}
+
+
 
 JNIEXPORT JNICALL jint TNN_FACE_DETECTOR(init)(JNIEnv *env, jobject thiz, jstring modelPath, jint width, jint height, jfloat scoreThreshold, jfloat iouThreshold, jint topk, jint computUnitType)
 {
@@ -191,4 +222,32 @@ JNIEXPORT JNICALL jobjectArray TNN_FACE_DETECTOR(detectFromImage)(JNIEnv *env, j
     }
 
     return 0;
+}
+
+JNIEXPORT jfloatArray JNICALL TNN_FACE_DETECTOR(bodySegmentFromImage)(JNIEnv *env, jobject thiz, jobject imageSource){
+    int width = 256;
+    int height = 256;
+    AndroidBitmapInfo  sourceInfocolor;
+    void*              sourcePixelscolor;
+
+    if (AndroidBitmap_getInfo(env, imageSource, &sourceInfocolor) < 0) {
+        return nullptr;
+    }
+
+    if (sourceInfocolor.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+        return nullptr;
+    }
+
+    if ( AndroidBitmap_lockPixels(env, imageSource, &sourcePixelscolor) < 0) {
+        return nullptr;
+    }
+    TNN_NS::DeviceType dt = TNN_NS::DEVICE_ARM;
+    TNN_NS::DimsVector target_dims = {1, 3, height, width};
+    auto input_mat = std::make_shared<TNN_NS::Mat>(dt, TNN_NS::N8UC4, target_dims, sourcePixelscolor);
+    auto asyncRefDetector = gBodySegment;
+    float* result = asyncRefDetector->detect(input_mat);
+    jfloatArray floatArray;
+    floatArray = env->NewFloatArray(256 * 256);
+    env->SetFloatArrayRegion(floatArray, 0, 256 * 256, result);
+    return floatArray;
 }

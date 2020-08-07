@@ -15,4 +15,7 @@ public class FaceDetector {
     public native int deinit();
     public native FaceInfo[] detectFromStream(byte[] yuv420sp, int width, int height, int rotate);
     public native FaceInfo[] detectFromImage(Bitmap bitmap, int width, int height);
+
+    public native int initForBodySegment(String modelPath, String modelName, String protoName);
+    public native float[] bodySegmentFromImage(Bitmap bitmap);
 }

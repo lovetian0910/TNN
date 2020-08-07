@@ -27,6 +27,7 @@ add_subdirectory(${TNN_ROOT}/ ../build)
 
 file(GLOB_RECURSE WRAPPER_SRCS ../demo/src/main/jni/cc/*.cc)
 file(GLOB_RECURSE COMMON_SRCS ${COMMON_SRC}/*.cc)
+MESSAGE(STATUS "COMMON_SRCS: ${COMMON_SRCS}")
 file(GLOB_RECURSE THIRDPARTY_SRCS ../demo/src/main/jni/thirdparty/kannarotate-android-lib/src/*.c)
 add_library(tnn_wrapper SHARED ${WRAPPER_SRCS} ${COMMON_SRCS} ${THIRDPARTY_SRCS})
 

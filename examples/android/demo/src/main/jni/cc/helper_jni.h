@@ -12,6 +12,7 @@ extern "C" {
 #endif
 std::string fdLoadFile(std::string path);
 char* jstring2string(JNIEnv* env, jstring jstr);
+char* jByteaArrayToChars(JNIEnv *env, jbyteArray bytearray);
 jstring string2jstring(JNIEnv* env, const char* pat);
 void setBenchResult(std::string result);
 JNIEXPORT JNICALL jstring TNN_HELPER(getBenchResult)(JNIEnv *env, jobject thiz);

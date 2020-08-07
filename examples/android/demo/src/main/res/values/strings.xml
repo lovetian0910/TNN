@@ -4,4 +4,5 @@
     <string name="tnn_fd_stream_btn_name">人脸检测-视频输入</string>
     <string name="tnn_fd_image_btn_name">人脸检测-图片输入</string>
     <string name="tnn_ic_image_btn_name">图像分类-图片输入</string>
+    <string name="body_segment_btn_name">人体检测-图片输入</string>
 </resources>

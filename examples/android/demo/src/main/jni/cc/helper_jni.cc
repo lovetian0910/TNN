@@ -45,6 +45,24 @@ char* jstring2string(JNIEnv* env, jstring jstr)
     return rtn;
 }
 
+char* jByteaArrayToChars(JNIEnv *env, jbyteArray bytearray)
+{
+    char *chars = nullptr;
+    jbyte *bytes;
+    bytes = env->GetByteArrayElements(bytearray, 0);
+
+    int chars_len = env->GetArrayLength(bytearray);
+    chars = new char[chars_len + 1];
+    memset(chars,0,chars_len + 1);
+    memcpy(chars, bytes, chars_len);
+    chars[chars_len] = 0;
+
+    env->ReleaseByteArrayElements(bytearray, bytes, 0);
+
+    return chars;
+}
+
+
 jstring string2jstring(JNIEnv* env, const char* pat) {
     jclass strClass = (env)->FindClass("java/lang/String");
     jmethodID ctorID = (env)->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");

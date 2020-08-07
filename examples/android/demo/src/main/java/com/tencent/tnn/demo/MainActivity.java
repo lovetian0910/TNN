@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.tencent.tnn.demo.ImageClassifyDetector.ImageClassifyDetectActivity;
 import com.tencent.tnn.demo.ImageFaceDetector.ImageFaceDetectActivity;
 import com.tencent.tnn.demo.StreamFaceDetector.StreamFaceDetectActivity;
+import com.tencent.tnn.demo.body.BodySegmentActivity;
 
 
 public class MainActivity extends Activity {
@@ -63,6 +64,18 @@ public class MainActivity extends Activity {
                     Activity activity = MainActivity.this;
                     intent.setClass(activity, ImageClassifyDetectActivity.class);
                     activity.startActivity(intent);
+                }
+            }
+        });
+
+        findViewById(R.id.body_segment_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isShowedActivity){
+                    isShowedActivity = true;
+                    Intent intent = new Intent();
+                    intent.setClass(MainActivity.this, BodySegmentActivity.class);
+                    MainActivity.this.startActivity(intent);
                 }
             }
         });

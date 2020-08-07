@@ -52,5 +52,17 @@
         android:textSize="16sp"
         android:text="@string/tnn_ic_image_btn_name"
         android:textColor="@color/white"/>
+    <TextView
+        android:id="@+id/body_segment_btn"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_bg"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="@string/body_segment_btn_name"
+        android:textColor="@color/white"/>
+
 
 </LinearLayout>
