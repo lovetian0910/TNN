@@ -5,7 +5,8 @@
         android:id="@+id/origin_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"/>
     <ImageView
         android:id="@+id/result_img"
         android:layout_width="wrap_content"
@@ -14,7 +15,8 @@
         android:layout_alignTop="@id/origin_img"
         android:layout_alignBottom="@id/origin_img"
         android:layout_alignLeft="@id/origin_img"
-        android:layout_alignRight="@id/origin_img"/>
+        android:layout_alignRight="@id/origin_img"
+        android:scaleType="fitXY"/>
     <Button
         android:id="@+id/run_button"
         android:layout_width="wrap_content"

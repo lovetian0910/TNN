@@ -35,7 +35,7 @@ float *BodySegment::detect(std::shared_ptr<TNN_NS::Mat> image_mat) {
     // step 3. get output mat
     TNN_NS::MatConvertParam output_convert_param;
     std::shared_ptr<TNN_NS::Mat> output_mat_scores = nullptr;
-    status = instance_->GetOutputMat(output_mat_scores, output_convert_param, "activation_1/truediv:0");
+    status = instance_->GetOutputMat(output_mat_scores, output_convert_param, "activation/truediv:0");
     if (status != TNN_NS::TNN_OK) {
         LOGE("GetOutputMat Error: %s\n", status.description().c_str());
         return nullptr;

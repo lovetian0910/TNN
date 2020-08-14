@@ -26,7 +26,7 @@ import java.util.Arrays;
  */
 public class BodySegmentFragment extends BaseFragment {
     private static final String TAG = "BodySegmentFragment";
-    private static final String IMAGE = "test.jpg";
+    private static final String IMAGE = "0CaX5KfoVTeO2B7j.jpg";
     private FaceDetector mFaceDetector = new FaceDetector();
     private ImageView mOriginImg;
     private ImageView mResult;
@@ -88,13 +88,17 @@ public class BodySegmentFragment extends BaseFragment {
     private void startDetect(){
         Bitmap originBitmap = FileUtils.readBitmapFromFile(getActivity().getAssets(), IMAGE);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(originBitmap, 256, 256, false);
-        writeImage2File(scaledBitmap);
+//        float[] dataArray = convertImage2FloatArray(scaledBitmap);
+//        writeImage2File(scaledBitmap);
         String modelPath = initModel();
         int result = mFaceDetector.initForBodySegment(modelPath, "live_parse_weights.opt.tnnmodel", "live_parse_weights.opt.tnnproto");
         if(result == 0){
+            long startTime = System.currentTimeMillis();
             float[] segRet = mFaceDetector.bodySegmentFromImage(scaledBitmap);
+            long endTime = System.currentTimeMillis();
+            Log.i(TAG, "body segment cost: " + (endTime - startTime) + "ms");
             if(segRet != null){
-                writeResule2File(segRet);
+//                writeResule2File(segRet);
                 Bitmap bitmap = convertRet2Bitmap(segRet);
                 mResult.setImageBitmap(bitmap);
             }
@@ -105,14 +109,54 @@ public class BodySegmentFragment extends BaseFragment {
         Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
         for(int i = 0; i < 256; i++){
             for(int j = 0; j < 256; j++){
-                int index = j * 256 + i;
-                int color = retArray[index] == 0.0f ? Color.TRANSPARENT : Color.RED;
+                int index = (j * 256 + i) * 5;
+                boolean isBody = false;
+                float max = 0.0f;
+                int maxIndex = 0;
+                for(int offset = 0;offset < 5; offset ++){
+                    if(retArray[index + offset] > max){
+                        maxIndex = offset;
+                        max = retArray[index + offset];
+                    }
+                }
+                isBody = maxIndex != 0;
+                int color = isBody ? Color.BLUE : Color.TRANSPARENT;
                 bitmap.setPixel(i, j, color);
             }
         }
         return bitmap;
     }
 
+    private float[] convertImage2FloatArray(Bitmap inputBitmap){
+        int dataLength = inputBitmap.getWidth() * inputBitmap.getHeight() * 3;
+        int index = 0;
+        float[] ret = new float[dataLength];
+        for(int i = 0; i < inputBitmap.getHeight(); i++){
+            for(int j = 0; j < inputBitmap.getWidth(); j++){
+                int pixel = inputBitmap.getPixel(j, i);
+                float red = (pixel >> 16) & 0xFF;
+                ret[index] = red;
+                index++;
+            }
+        }
+        for(int i = 0; i < inputBitmap.getHeight(); i++){
+            for(int j = 0; j < inputBitmap.getWidth(); j++){
+                int pixel = inputBitmap.getPixel(j, i);
+                float green = (pixel >> 8) & 0xFF;
+                ret[index] = green;
+                index++;
+            }
+        }
+        for(int i = 0; i < inputBitmap.getHeight(); i++){
+            for(int j = 0; j < inputBitmap.getWidth(); j++){
+                int pixel = inputBitmap.getPixel(j, i);
+                float blue = (pixel) & 0xFF;
+                ret[index] = blue;
+                index++;
+            }
+        }
+        return ret;
+    }
     private void writeImage2File(Bitmap inputBitmap){
 
         String filePath = "/sdcard/body_segment_input.txt";

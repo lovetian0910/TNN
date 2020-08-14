@@ -246,8 +246,29 @@ JNIEXPORT jfloatArray JNICALL TNN_FACE_DETECTOR(bodySegmentFromImage)(JNIEnv *en
     auto input_mat = std::make_shared<TNN_NS::Mat>(dt, TNN_NS::N8UC4, target_dims, sourcePixelscolor);
     auto asyncRefDetector = gBodySegment;
     float* result = asyncRefDetector->detect(input_mat);
-    jfloatArray floatArray;
-    floatArray = env->NewFloatArray(256 * 256);
-    env->SetFloatArrayRegion(floatArray, 0, 256 * 256, result);
-    return floatArray;
+    if(result != nullptr){
+        jfloatArray floatArray;
+        floatArray = env->NewFloatArray(256 * 256 * 5);
+        env->SetFloatArrayRegion(floatArray, 0, 256 * 256 * 5, result);
+        return floatArray;
+    }
+    return nullptr;
+}
+
+JNIEXPORT jfloatArray JNICALL TNN_FACE_DETECTOR(bodySegmengFromImage2)(JNIEnv *env, jobject thiz, jfloatArray data){
+    int width = 256;
+    int height = 256;
+    TNN_NS::DeviceType dt = TNN_NS::DEVICE_ARM;
+    TNN_NS::DimsVector target_dims = {1, 3, height, width};
+    float* dataArray = env->GetFloatArrayElements(data, 0);
+    auto input_mat = std::make_shared<TNN_NS::Mat>(dt, TNN_NS::NCHW_FLOAT, target_dims, dataArray);
+    auto asyncRefDetector = gBodySegment;
+    float* result = asyncRefDetector->detect(input_mat);
+    if(result != nullptr){
+        jfloatArray floatArray;
+        floatArray = env->NewFloatArray(256 * 256 * 5);
+        env->SetFloatArrayRegion(floatArray, 0, 256 * 256 * 5, result);
+        return floatArray;
+    }
+    return nullptr;
 }

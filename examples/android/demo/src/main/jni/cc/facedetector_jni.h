@@ -17,6 +17,7 @@ JNIEXPORT jint JNICALL TNN_FACE_DETECTOR(initForBodySegment)(JNIEnv *env, jobjec
                                                           jstring model_path, jstring model_name,
                                                           jstring proto_name);
 JNIEXPORT jfloatArray JNICALL TNN_FACE_DETECTOR(bodySegmentFromImage)(JNIEnv *env, jobject thiz, jobject bitmap);
+JNIEXPORT jfloatArray JNICALL TNN_FACE_DETECTOR(bodySegmengFromImage2)(JNIEnv *env, jobject thiz, jfloatArray data);
 #ifdef __cplusplus
 }
 #endif

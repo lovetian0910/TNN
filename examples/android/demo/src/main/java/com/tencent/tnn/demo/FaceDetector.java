@@ -18,4 +18,6 @@ public class FaceDetector {
 
     public native int initForBodySegment(String modelPath, String modelName, String protoName);
     public native float[] bodySegmentFromImage(Bitmap bitmap);
+
+    public native float[] bodySegmengFromImage2(float[] data);
 }
