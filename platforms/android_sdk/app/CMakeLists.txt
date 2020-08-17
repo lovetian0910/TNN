@@ -10,8 +10,12 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 set(TNN_ROOT ../../..)
+set(JNI_SRC src/main/jni)
 include_directories(${TNN_ROOT}/include)
 include_directories(${TNN_ROOT}/third_party/opencl/include)
+include_directories(${JNI_SRC}/include)
+
+file(GLOB_RECURSE JNI_SRCS ${JNI_SRC}/*.cpp)
 
 set(TNN_OPENCL_ENABLE ON CACHE BOOL "" FORCE)
 set(TNN_ARM_ENABLE ON CACHE BOOL "" FORCE)
@@ -19,7 +23,7 @@ set(TNN_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${TNN_ROOT}/ ../build)
 
-add_library(tnn_android_sdk SHARED)
+add_library(tnn_android_sdk SHARED ${JNI_SRCS})
 
 find_library( # Sets the name of the path variable.
               log-lib
