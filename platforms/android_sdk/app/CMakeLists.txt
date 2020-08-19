@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 set(TNN_ROOT ../../..)
-set(JNI_SRC src/main/jni)
+set(JNI_SRC ./src/main/jni)
 include_directories(${TNN_ROOT}/include)
 include_directories(${TNN_ROOT}/third_party/opencl/include)
 include_directories(${JNI_SRC}/include)

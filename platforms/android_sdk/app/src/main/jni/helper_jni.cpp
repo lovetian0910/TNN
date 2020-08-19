@@ -1,5 +1,6 @@
 #include "include/helper_jni.h"
 #include <fstream>
+#include <vector>
 
 static std::string gBenchResultStr = "";
 // Helper functions
@@ -54,7 +55,16 @@ jstring string2jstring(JNIEnv* env, const char* pat) {
     return r;
 }
 
-void setBenchResult(std::string result)
-{
-    gBenchResultStr = result;
+
+std::vector<int> jintArray2vector(JNIEnv* env, jintArray array){
+    jint arrLen = env->GetArrayLength(array);
+    jint* cArray = (jint*) malloc(sizeof(jint) * arrLen);
+    memset(cArray, 0, sizeof(jint) * arrLen);
+    env->GetIntArrayRegion(array, 0, arrLen, cArray);
+    std::vector<int> intVector(arrLen);
+    for(int i = 0; i < arrLen; i++){
+        intVector.push_back(cArray[i]);
+    }
+    free(cArray);
+    return intVector;
 }

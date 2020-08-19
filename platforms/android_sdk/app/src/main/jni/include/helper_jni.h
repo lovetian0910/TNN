@@ -6,14 +6,9 @@
 #define ANDROID_HELPER_JNI_H
 #include <string>
 #include <jni.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 std::string fdLoadFile(std::string path);
 char* jstring2string(JNIEnv* env, jstring jstr);
 jstring string2jstring(JNIEnv* env, const char* pat);
-void setBenchResult(std::string result);
-#ifdef __cplusplus
-}
-#endif
+std::vector<int> jintArray2vector(JNIEnv* env, jintArray array);
 #endif //ANDROID_HELPER_JNI_H
