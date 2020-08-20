@@ -35,6 +35,9 @@ TNN_NS::Status TNNManager::init(const std::string &proto_content, const std::str
             instance                   = net_->CreateInst(network_config, status, shapeMap);
         }
     }
+    if(instance != nullptr){
+        instance->SetCpuNumThreads(2);
+    }
     instance_ = instance;
     return status;
 }

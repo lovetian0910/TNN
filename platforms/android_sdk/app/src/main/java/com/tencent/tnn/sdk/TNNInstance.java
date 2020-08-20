@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
  * @author jwkuang
  */
 public class TNNInstance {
+    public static final int COMPUTE_UNIT_TYPE_CPU = 0;
+    public static final int COMPUTE_UNIT_TYPE_GPU = 1;
     static {
         System.loadLibrary("tnn_android_sdk");
     }

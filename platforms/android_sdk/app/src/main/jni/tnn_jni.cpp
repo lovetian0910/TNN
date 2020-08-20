@@ -21,7 +21,11 @@ extern "C" {
         modelContent = fdLoadFile(modelPathStr);
         std::vector<int> inputDimsVector = jintArray2vector(env, input_dims);
         auto *tnnManager = new TNNManager();
-        tnnManager->init(protoContent, modelContent, TNNComputeUnitsGPU, inputDimsVector);
+        TNNComputeUnits computeUnits = TNNComputeUnitsCPU;
+        if(comput_unit_type == 1){
+            computeUnits = TNNComputeUnitsGPU;
+        }
+        tnnManager->init(protoContent, modelContent, computeUnits, inputDimsVector);
         return (jlong) tnnManager;
     }
 
