@@ -63,5 +63,16 @@ extern "C" {
         }
         return nullptr;
     }
+
+    JNIEXPORT void JNICALL
+    Java_com_tencent_tnn_sdk_TNNInstance_nativeSetThreadNum(JNIEnv *env, jobject thiz,
+                                                            jlong native_instance, jint thread_num) {
+        if(native_instance == 0){
+            return;
+        }
+        auto* tnnManager = (TNNManager*) native_instance;
+        tnnManager->setThreadNum(thread_num);
+    }
 }
+
 

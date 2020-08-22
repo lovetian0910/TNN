@@ -20,11 +20,13 @@ class TNNManager{
 public:
     TNN_NS::Status init(const std::string &proto_content, const std::string &model_content, TNNComputeUnits units, std::vector<int> nchw);
     float* executeWithBitmap(int width, int height, void* sourcePixelscolor, bool reverseChannel, std::string outputName);
+    TNN_NS::Status setThreadNum(const int num);
     TNNManager();
     ~TNNManager();
 private:
     std::shared_ptr<TNN_NS::TNN> net_           = nullptr;
     std::shared_ptr<TNN_NS::Instance> instance_ = nullptr;
     TNN_NS::DeviceType device_type_             = TNN_NS::DEVICE_ARM;
+    int threadNum_ = 1;
 };
 #endif //TNNSDK_TNN_NATIVE_MANAGER_H

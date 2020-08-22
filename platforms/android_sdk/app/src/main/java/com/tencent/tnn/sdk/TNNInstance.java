@@ -26,7 +26,15 @@ public class TNNInstance {
         }
         return null;
     }
+
+    public void setThreadNum(int threadNum){
+        if(tnnNativeInstance != 0L){
+            nativeSetThreadNum(tnnNativeInstance, threadNum);
+        }
+    }
     public native long nativeInit(String protoPath, String modelPath, int computUnitType, int[] inputDims);
 
     public native float[] nativeExecuteWithBitmap(long nativeInstance, int width, int height, Bitmap imageSource, boolean reverseChannel, int outputSize, String outputName);
+
+    public native void nativeSetThreadNum(long nativeInstance, int threadNum);
 }

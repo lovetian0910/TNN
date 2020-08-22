@@ -36,7 +36,7 @@ TNN_NS::Status TNNManager::init(const std::string &proto_content, const std::str
         }
     }
     if(instance != nullptr){
-        instance->SetCpuNumThreads(2);
+        instance->SetCpuNumThreads(threadNum_);
     }
     instance_ = instance;
     return status;
@@ -79,5 +79,13 @@ float *TNNManager::executeWithBitmap(int width, int height, void *sourcePixelsco
         return nullptr;
     }
     return (float*)output_mat_scores->GetData();
+}
+
+TNN_NS::Status TNNManager::setThreadNum(const int num) {
+    threadNum_ = num;
+    if(instance_ == nullptr){
+        return instance_->SetCpuNumThreads(num);
+    }
+    return -1;
 }
 
