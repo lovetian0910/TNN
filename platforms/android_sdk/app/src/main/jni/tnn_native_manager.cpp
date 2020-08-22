@@ -52,6 +52,7 @@ TNNManager::~TNNManager() {
 
 float *TNNManager::executeWithBitmap(int width, int height, void *sourcePixelscolor, bool reverseChannel, std::string outputName) {
     if(instance_ == nullptr){
+        LOGE("instance is null");
         return nullptr;
     }
     TNN_NS::DeviceType dt = TNN_NS::DEVICE_ARM;
