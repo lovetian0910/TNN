@@ -15,6 +15,7 @@ extern "C" {
                                                     jstring model_path, jint comput_unit_type,
                                                     jintArray input_dims) {
         std::string protoContent, modelContent;
+        LOGI("init start");
         std::string protoPathStr(jstring2string(env, proto_path));
         std::string modelPathStr(jstring2string(env, model_path));
         protoContent = fdLoadFile(protoPathStr);
@@ -38,20 +39,24 @@ extern "C" {
                                                                  jint output_size,
                                                                  jstring output_name) {
         if(native_instance == 0){
+            LOGE("native_instance == 0");
             return nullptr;
         }
         auto* tnnManager = (TNNManager*) native_instance;
         AndroidBitmapInfo  sourceInfocolor;
         void* sourcePixelscolor;
         if (AndroidBitmap_getInfo(env, image_source, &sourceInfocolor) < 0) {
+            LOGE("AndroidBitmap_getInfo < 0");
             return nullptr;
         }
 
         if (sourceInfocolor.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+            LOGE("format != ANDROID_BITMAP_FORMAT_RGBA_8888");
             return nullptr;
         }
 
         if ( AndroidBitmap_lockPixels(env, image_source, &sourcePixelscolor) < 0) {
+            LOGE("AndroidBitmap_lockPixels < 0");
             return nullptr;
         }
         std::string outputNameStr = jstring2string(env, output_name);
@@ -61,6 +66,7 @@ extern "C" {
             env->SetFloatArrayRegion(jArray, 0, output_size, retArray);
             return jArray;
         }
+        LOGE("retArray == null");
         return nullptr;
     }
 
