@@ -68,3 +68,10 @@ std::vector<int> jintArray2vector(JNIEnv* env, jintArray array){
     free(cArray);
     return intVector;
 }
+
+std::vector<float> jfloatArray2vector(JNIEnv* env, jfloatArray array){
+    jsize scaleSize = env->GetArrayLength(array);
+    std::vector<float> floatVector(scaleSize);
+    env->GetFloatArrayRegion(array, 0, scaleSize, &floatVector[0]);
+    return floatVector;
+}

@@ -19,7 +19,7 @@ typedef enum {
 class TNNManager{
 public:
     TNN_NS::Status init(const std::string &proto_content, const std::string &model_content, TNNComputeUnits units, std::vector<int> nchw);
-    float* executeWithBitmap(int width, int height, void* sourcePixelscolor, bool reverseChannel, std::string outputName);
+    float* executeWithBitmap(int width, int height, void* sourcePixelscolor, bool reverseChannel, std::string outputName, std::vector<float> scale, std::vector<float> bias);
     TNN_NS::Status setThreadNum(const int num);
     TNNManager();
     ~TNNManager();

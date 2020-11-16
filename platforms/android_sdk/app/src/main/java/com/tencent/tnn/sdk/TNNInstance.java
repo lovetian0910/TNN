@@ -20,9 +20,9 @@ public class TNNInstance {
         tnnNativeInstance = nativeInit(protoPath, modelPath, computUnitType, inputDims);
     }
 
-    public float[] executeWithBitmap(int width, int height, Bitmap imageSource, boolean reverseChannel, int outputSize, String outputName){
+    public float[] executeWithBitmap(int width, int height, Bitmap imageSource, boolean reverseChannel, int outputSize, String outputName, float[] scale, float[] bias){
         if(tnnNativeInstance != 0L){
-            return nativeExecuteWithBitmap(tnnNativeInstance, width, height, imageSource, reverseChannel, outputSize, outputName);
+            return nativeExecuteWithBitmap(tnnNativeInstance, width, height, imageSource, reverseChannel, outputSize, outputName, scale, bias);
         }
         return null;
     }
@@ -34,7 +34,7 @@ public class TNNInstance {
     }
     public native long nativeInit(String protoPath, String modelPath, int computUnitType, int[] inputDims);
 
-    public native float[] nativeExecuteWithBitmap(long nativeInstance, int width, int height, Bitmap imageSource, boolean reverseChannel, int outputSize, String outputName);
+    public native float[] nativeExecuteWithBitmap(long nativeInstance, int width, int height, Bitmap imageSource, boolean reverseChannel, int outputSize, String outputName, float[] scale, float[] bias);
 
     public native void nativeSetThreadNum(long nativeInstance, int threadNum);
 }

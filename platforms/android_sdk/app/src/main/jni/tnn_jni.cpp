@@ -37,7 +37,9 @@ extern "C" {
                                                                  jint height, jobject image_source,
                                                                  jboolean reverse_channel,
                                                                  jint output_size,
-                                                                 jstring output_name) {
+                                                                 jstring output_name,
+                                                                 jfloatArray scale,
+                                                                 jfloatArray bias) {
         if(native_instance == 0){
             LOGE("native_instance == 0");
             return nullptr;
@@ -60,7 +62,9 @@ extern "C" {
             return nullptr;
         }
         std::string outputNameStr = jstring2string(env, output_name);
-        float* retArray = tnnManager->executeWithBitmap(width, height, sourcePixelscolor, reverse_channel == JNI_TRUE, outputNameStr);
+        std::vector<float> scaleVector = jfloatArray2vector(env, scale);
+        std::vector<float> biasVector = jfloatArray2vector(env, bias);
+        float* retArray = tnnManager->executeWithBitmap(width, height, sourcePixelscolor, reverse_channel == JNI_TRUE, outputNameStr, scaleVector, biasVector);
         if(retArray != nullptr){
             jfloatArray jArray = env->NewFloatArray(output_size);
             env->SetFloatArrayRegion(jArray, 0, output_size, retArray);

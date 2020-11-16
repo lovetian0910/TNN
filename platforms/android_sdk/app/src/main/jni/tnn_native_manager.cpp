@@ -50,7 +50,7 @@ TNNManager::~TNNManager() {
 
 }
 
-float *TNNManager::executeWithBitmap(int width, int height, void *sourcePixelscolor, bool reverseChannel, std::string outputName) {
+float *TNNManager::executeWithBitmap(int width, int height, void *sourcePixelscolor, bool reverseChannel, std::string outputName, std::vector<float> scale, std::vector<float> bias) {
     if(instance_ == nullptr){
         LOGE("instance is null");
         return nullptr;
@@ -60,6 +60,8 @@ float *TNNManager::executeWithBitmap(int width, int height, void *sourcePixelsco
     auto input_mat = std::make_shared<TNN_NS::Mat>(dt, TNN_NS::N8UC4, target_dims, sourcePixelscolor);
     TNN_NS::MatConvertParam input_convert_param;
     input_convert_param.reverse_channel = reverseChannel;
+    input_convert_param.scale = scale;
+    input_convert_param.bias = bias;
     auto status = instance_->SetInputMat(input_mat, input_convert_param);
     if (status != TNN_NS::TNN_OK) {
         LOGE("input_blob_convert.ConvertFromMatAsync Error: %s\n", status.description().c_str());
